@@ -1,0 +1,299 @@
+<?php include 'connect.php'; ?>
+<!DOCTYPE html>
+<!-- Created by CodingLab |www.youtube.com/CodingLabYT-->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <!--<title> Drop Down Sidebar Menu | CodingLab </title>-->
+    <link rel="stylesheet" href="style.css">
+    <!-- Boxiocns CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   </head>
+	
+	
+<body>
+  <div class="sidebar close">
+    <?php include "sidebar.php"; ?>
+  </div>
+	
+  <section class="home-section">
+    <div class="home-content">
+      <i class='bx bx-menu' ></i>
+      <span class="text">Dashboard</span>
+    </div>
+	<div class="setting-Dash">
+		<div class="setting">
+  <div class="container">
+    <div class="view-account">
+        <section class="module">
+            <div class="module-inner">
+                <div class="content-panel">
+                    <form class="form-horizontal">
+                        <fieldset class="fieldset">
+                            <h3 class="fieldset-title">Personal Info</h3> 
+							
+                            <div class="form-group">
+                                <label class="label">User Name</label>
+                                <div class="textfield">
+                                    <input type="text" class="form-control" id="ownerUser">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="label">Name</label>
+                                <div class="textfield">
+                                    <input type="text" class="form-control" id="ownerName">
+                                </div>
+                            </div>
+							<div class="form-group">
+                                <label class="label">Email</label>
+                                <div class="textfield">
+                                    <input type="email" class="form-control" id="ownerEmail">
+                               
+                                </div>
+                            </div>
+							<div class="form-group">
+                                <label class="label">Phone Number</label>
+                                <div class="textfield">
+                                    <input type="text" class="form-control" id="ownerNumber">
+                               
+                                </div>
+                            </div>
+                        </fieldset>
+						
+                        <div class="form-group">
+                            <div class="updateButtonBox">
+                                <input class="updateButton" type="button" value="Update Profile" onClick="updatePass()">
+                            </div>
+                        </div>
+						<hr>
+						
+						<fieldset class="fieldset">
+                            <h3 class="fieldset-title">Security</h3>
+                            <div class="form-group">
+                                <label class="label">Old Password</label>
+                                <div class="textfield">
+                                    <input type="password" class="form-control" id="oldPass">
+                               		<div id="passAlert0" class="passAlert"></div>
+                                </div>
+                            </div>
+							<div class="form-group">
+                                <label class="label">New Password</label>
+                                <div class="textfield">
+                                    <input type="password" class="form-control" id="newPass" onKeyUp="checkPass()">
+                               		<div id="passAlert1" class="passAlert"></div>
+                                </div>
+                            </div>
+							<div class="form-group">
+                                <label class="label">Confirm Password</label>
+                                <div class="textfield">
+                                    <input type="password" class="form-control" onKeyUp="checkPass()" id="conPass">
+                               		<div id="passAlert2" class="passAlert"></div>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="form-group">
+                            <div class="updateButtonBox">
+                                <input class="updateButton" type="button" value="Update Password" onClick="updatePass()">
+                            </div>
+                        </div>
+                    </form>
+					
+					
+					<div id="popupWindow" class="popup">
+    					<div class="popup-content">
+							<div class="xclose">
+								<span class="close" onclick="closePopup()">&times;</span>
+							</div>
+							<div id="cardVerify">
+								<form action="action/createUser.php"  method="POST" class="myform" name="myForm" id="myForm" enctype="multipart/form-data">
+									<div class="myform-row">
+										<div id="divalert" class="divalert" name="divalert"></div>
+									</div>
+									<div class="myform-row">
+										<div class="label">
+											<label for="frontID" class="myform-label">Front ID Card</label>
+										</div>
+										<div class="input">
+											<input type="file" onchange="validateImage()" id="frontID" name="frontID" class="myform-input" required>
+											<div id="imageAlert0"></div>
+										</div>
+									</div>
+									<div class="myform-row">
+										<div class="label">
+											<label for="backID" class="myform-label">Back ID Card</label>
+										</div>
+										<div class="input">
+											<input type="file" id="backID" name="backID" class="myform-input" required>
+											<div id="imageAlert1"></div>
+										</div>
+									</div>
+									<div class="myform-row">
+										<div class="label">
+											<label for="IDwithFace" class="myform-label">ID Card with Face</label>
+										</div>
+										<div class="input">
+											<input type="file" id="IDwithFace" name="IDwithFace" class="myform-input" required>
+											<div id="imageAlert2"></div>
+										</div>
+									</div>
+									<input type="button" id="submitDoc" class="button" value="Submit Document" onClick="updatePass()">
+								</form>
+
+							</div>
+    					</div>
+					</div>
+					
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+	</div>
+	</div>
+	  
+  </section>
+  
+</body>
+</html>
+<script src="scripts.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+	fetchData();
+});
+	
+function updatePass() {
+    var pass = $("#oldPass").val();
+
+    $.ajax({
+        url: "action/checkOldPass.php", // The script to call to add data
+        type: "GET",
+        data: { admID: "<?php echo $_SESSION['adm_id']; ?>", pass:pass },
+        success: function(response) {
+            if (response == 1) {
+                $("#passAlert0").hide();
+				if($("#conPass").val() === "" || $("#newPass").val() === "" ){
+					if($("#newPass").val() === "")
+						$("#passAlert1").text("This Text Field Must Not Empty");
+					else
+						$("#passAlert1").hide();
+					if($("#conPass").val() === "")
+						$("#passAlert2").text("This Text Field Must Not Empty");
+					else
+						$("#passAlert2").hide();
+				}
+				else{
+					$("#passAlert1").hide();
+					$("#passAlert2").hide();
+					
+					if($("#conPass").val() == $("#newPass").val()){
+						$.ajax({
+						url: "action/updatePass.php", // The script to call to add data
+						type: "GET",
+						data: { admID: "<?php echo $_SESSION['adm_id']; ?>", newpass:$("#newPass").val() },
+						success: function(response) {
+							console.log(response);
+							if(response){
+								alert("Password Changed Successfully!");
+								$("#oldPass").text("");
+								$("#newPass").text("");
+								$("#conPass").text("");
+							}
+							else{
+								alert("Password Changed Failed!");
+							}
+						},
+						error: function(xhr, status, error) {
+            
+						}
+						})
+					}
+						
+				}
+			
+            } else {
+                $("#passAlert0").text("Old Password Not Match");
+				
+            }
+        },
+        error: function(xhr, status, error) {
+            
+        }
+    });
+}
+	
+
+function checkPass(){
+	if($("#conPass").val() !== $("#newPass").val()){
+		$("#passAlert2").show();
+		$("#passAlert2").text("Password Not Match with New Password");
+	}
+	else{
+		$("#passAlert2").hide();
+		
+	}
+}
+	
+function validateImage() {
+    var fileInput = document.getElementById('frontID');
+    var filePath = fileInput.value;
+    // Get the file extension
+    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+	// Get the file size
+    var fileSize = fileInput.files[0].size;
+	
+    if (!allowedExtensions.exec(filePath)) {
+        fileInput.value = '';
+		$("#imageAlert").text("Please upload file having extensions .jpeg/.jpg/.png/.gif only.");
+        return false;
+		
+    }
+	else{
+		$("#imageAlert").hide();
+		if (fileSize > 10 * 1024 * 1024) {
+			fileInput.value = '';
+			$("#imageAlert").text("File size should not exceed 5MB.");
+			return false;
+		}
+		else{
+			$("#imageAlert").hide();
+			return true;
+		}
+	}
+}
+
+function fetchData() {
+	var userid = <?php echo $_SESSION['adm_id']; ?>;
+    $.ajax({
+        url: 'action/fetchAdminData.php',
+        type: 'GET',
+		data:{userId: userid},
+        dataType: 'json',
+        success: function(response) {
+			$('#shopTitle').val(response[0][0]);
+			$('#shopEmail').val(response[0][1]);
+			$('#shopNumber').val(response[0][2]);
+			$('#shopDescr').text(response[0][3]);
+			$('#ownerUser').val(response[0][4]);
+			//$('#ownerName').text(response[0][5]);
+			//$('#ownerEmail').text(response[0][0]);
+			//$('#ownerNumber').text(response[0][5]);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        }
+    });
+}
+	
+function openPopup() {
+    document.getElementById("popupWindow").style.display = "block";
+	$('#cardVerify').show();
+	
+}
+	
+	  
+ 
+  </script>

@@ -1,0 +1,11 @@
+{
+    "name": "acer/lfsc",
+    "autoload": {
+        "psr-4": {
+            "Acer\\Lfsc\\": "src/"
+        }
+    },
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    }
+}
